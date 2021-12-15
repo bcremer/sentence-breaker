@@ -30,19 +30,21 @@ class Lexer
 
     /**
      * @param string $input
-     * @return Token[]
+     * @return \Generator<Token|string>
      * @throws States\StateException
      */
-    public function run(string $input): array
+    public function run(string $input): \Generator
     {
         $this->setInput($input);
 
         while ($this->state instanceof States\State) {
             $stateFn = $this->state;
             $this->state = $stateFn($this);
+            yield from $this->tokens;
+            $this->tokens = [];
         }
 
-        return $this->tokens;
+        yield from $this->tokens;
     }
 
     private function setInput(string $input): void

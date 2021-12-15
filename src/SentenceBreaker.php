@@ -96,13 +96,14 @@ class SentenceBreaker
      * @throws ConfigurationException
      * @throws Lexing\States\StateException
      */
-    public function split(string $text): array
+    public function split(string $text): \Generator
     {
         $this->probabilityCalculator->setAbbreviations($this->getAbbreviations());
 
         $tokens = $this->lexer->run($text);
+
         $probabilities = $this->probabilityCalculator->calculate($tokens);
-        
+
         return $this->sentenceBuilder->build($probabilities);
     }
 

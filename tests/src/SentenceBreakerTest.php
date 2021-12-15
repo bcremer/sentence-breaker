@@ -15,15 +15,16 @@ class SentenceBreakerTest extends TestCase
         $breaker->addAbbreviations(['Dr', 'Prof']);
 
         $sentences = $breaker->split("Hello Dr. Jones! How are you? I'm fine, thanks!");
-        $this->assertSame(['Hello Dr. Jones!', 'How are you?', "I'm fine, thanks!"], $sentences);
+
+        $this->assertSame(['Hello Dr. Jones!', 'How are you?', "I'm fine, thanks!"], iterator_to_array($sentences));
     }
-    
+
     public function testPluralizedAbbreviation(): void
     {
         $breaker = new SentenceBreaker();
 
         $sentences = $breaker->split("So it looks like they've got F.D.R.'s for One Marine right now.");
-        $this->assertSame(["So it looks like they've got F.D.R.'s for One Marine right now."], $sentences);
+        $this->assertSame(["So it looks like they've got F.D.R.'s for One Marine right now."], iterator_to_array($sentences));
     }
 
     /**
@@ -34,7 +35,7 @@ class SentenceBreakerTest extends TestCase
         $breaker = new SentenceBreaker();
         $breaker->addAbbreviations(new FlatFileProvider(__DIR__.'/../assets/data', ['*']));
 
-        $this->assertSame($sentences, $breaker->split($text));
+        $this->assertSame($sentences, iterator_to_array($breaker->split($text)));
     }
 
     /**
